@@ -14,7 +14,7 @@ A simple todo list built with **Python** and **C**
 https://github.com/wensheng246-prog/TodoList_CTkinter_framework
 
 ## install dependencies
-pip install customtkinter
+pip install customtkinter  
 pip install pyinstaller
 
 ## run the application
