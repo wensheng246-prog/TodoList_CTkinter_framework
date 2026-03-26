@@ -11,9 +11,10 @@ A simple todo list built with **Python** and **C**
 | PyInstaller | package to executable | |
 
 # clone project
+https://github.com/wensheng246-prog/TodoList_CTkinter_framework
 
 # install dependencies
 pip install customtkinter
 
 # run the application
-    main.py
+main.py
