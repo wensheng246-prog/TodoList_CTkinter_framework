@@ -1,14 +1,13 @@
 import ctypes
-from time import sleep
 
 try:
-    td = ctypes.cdll.LoadLibrary("D:/todo_list/include/libtd.dll")
+    td = ctypes.cdll.LoadLibrary("D:\\todo_list\\include\\libtd.dll")
 except OSError as e:
     print("Error:{e}")
     exit(1)
 
 td.notice.argtypes = []
-td.notice.restype = None
+td.notice.restype = ctypes.c_bool
 
 td.get_path.argtypes = []
 td.get_path.restype = ctypes.c_char_p
@@ -29,7 +28,8 @@ td.read.argtypes = [ctypes.c_int]
 td.read.restype = ctypes.c_char_p
 
 td.get_path()
-td.notice()
+if not td.notice():
+    exit(1)
 #----------------------------------
 import customtkinter as tk
 

@@ -42,31 +42,46 @@ bool tips(){
     return false;
 }
 
-void notice(){
-    printf("\n"RED"If you are testing this application, after this please delete the file show below\n"WHITE);
-    printf(todo_a);
-}
-
 void create(){
     fopen(todo_a,"wb");
 }
 
-void databasederr(){
+bool databaseerr(){
     int result = MessageBoxW(NULL,L"Databased doesn't exist. Do you want to create a databased?",L"Error Notice",MB_YESNO|MB_ICONERROR|MB_DEFBUTTON2);
     switch (result){
         case IDYES:
             create();
-            return;
+            break;
         case IDNO:
-            return;
+            break;
     }
+    FILE * fp = fopen(todo_a,"r+b");
+    if(fp == NULL){
+        int result = MessageBoxW(NULL,L"Sorry database didn't created.",L"Error Notice",MB_YESNO|MB_ICONERROR|MB_DEFBUTTON2);
+        switch (result){
+            case IDYES:
+                return false;
+            case IDNO:
+                return false;
+        }
+    }
+    return true;
+}
+
+bool notice(){
+    FILE * fp = fopen(todo_a,"r+b");
+    if(fp == NULL){
+        if(!databaseerr()){ return false; }
+    }
+    printf("\n"RED"If you are testing this application, after this please delete the file show below\n"WHITE);
+    printf(todo_a);
+    return true;
 }
 
 char * read(int i){
     strcpy(todo.todo,"\0");
     FILE * fp = fopen(get_path(),"r+b");
     if(fp == NULL){
-        databasederr();
         return todo.todo;
     }
 
@@ -77,6 +92,7 @@ char * read(int i){
     }
     return todo.todo;
 }
+
 
 bool readb(int i){
     strcpy(todo.todo,"\0");
@@ -96,7 +112,7 @@ bool readb(int i){
 void write(char * in,bool done){
     FILE * fp = fopen(get_path(),"a+b");
     if (fp==NULL){
-        databasederr();
+        return;
     }
     fseek(fp,0,SEEK_END);
     fwrite(in,sizeof(char[100]),1,fp);
