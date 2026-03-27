@@ -23,6 +23,6 @@ main.py
 
 ## built application
 >>In cmd prompt cd to your "../todolist/src" file and run the command below
-#### pyinstaller --onefile --windowed --name "TodoList" --add-data "..\include\libtd.dll;." --hidden-import customtkinter --hidden-import ctypes main.py
+    pyinstaller --onefile --windowed --name "TodoList" --add-data "..\include\libtd.dll;." --hidden-import customtkinter --hidden-import ctypes main.py
 >>After run the first command run the command below
-#### pyinstaller TodoList.spec
+    pyinstaller TodoList.spec
