@@ -18,7 +18,7 @@ pip install customtkinter
 pip install pyinstaller
 
 ## run the application
->>Please change the file location in main.py (line 4)
+>>Please change the file location in main.py (line 4)  
 main.py
 
 ## built application
