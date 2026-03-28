@@ -10,10 +10,26 @@ struct TOD{
     bool done;
 };
 
+int szbool = sizeof(bool);
 int sztodo = sizeof(struct TOD);
+bool settings[1];
 
 struct TOD todo;
 char todo_a[260];
+char picture_path[260];
+
+char* get_pic_path(){
+    GetTempPath(260,picture_path);
+    char* last = NULL;
+    for (char* p = picture_path; *p; p++) {
+        if (*p == '\\') *p = '/';
+    }
+    
+    strcat(picture_path,"TodoList_temp/pictures/setting.png");
+    printf("\n");
+    printf(picture_path);
+    return picture_path;
+}
 
 char* get_path(){
     GetModuleFileName(GetModuleHandle(NULL), todo_a, 260);
@@ -78,6 +94,21 @@ bool notice(){
     return true;
 }
 
+bool * reads(){
+    FILE * fp = fopen(get_path(),"r+b");
+    if(fp == NULL){
+        return settings;
+    }
+    fseek(fp,0,SEEK_SET);
+    if(fread(settings,sizeof(settings),1,fp))
+        return settings;
+    return NULL;
+}
+
+bool reads_(int num){
+    return settings[num];
+}
+
 char * read(int i){
     strcpy(todo.todo,"\0");
     FILE * fp = fopen(get_path(),"r+b");
@@ -86,7 +117,7 @@ char * read(int i){
     }
 
     char * tmp = 0;
-    fseek(fp,i*sztodo,SEEK_SET);
+    fseek(fp,sizeof(settings)+i*sztodo,SEEK_SET);
     if(fread(&todo,sztodo,1,fp)){
         return todo.todo;
     }
@@ -102,11 +133,20 @@ bool readb(int i){
     }
 
     char * tmp = 0;
-    fseek(fp,i*sztodo,SEEK_SET);
+    fseek(fp,sizeof(settings)+i*sztodo,SEEK_SET);
     if(fread(&todo,sztodo,1,fp)){
         return todo.done;
     }
     return todo.done;
+}
+
+void write_setting(bool auto_delete){
+    FILE * fp = fopen(get_path(),"a+b");
+    if (fp==NULL){
+        return;
+    }
+    fwrite(&auto_delete,szbool,1,fp);
+    fclose(fp);
 }
 
 void write(char * in,bool done){
@@ -116,9 +156,9 @@ void write(char * in,bool done){
     }
     fseek(fp,0,SEEK_END);
     fwrite(in,sizeof(char[100]),1,fp);
-    fwrite(&done,sizeof(bool),1,fp);
+    fwrite(&done,szbool,1,fp);
     fclose(fp);
 }
 
-// D:\todo_list\databased\todo.dat
+
 //gcc -m64 -shared -o D:\\todo_list\\include\\libtd.dll D:\todo_list\src\todolist.c
